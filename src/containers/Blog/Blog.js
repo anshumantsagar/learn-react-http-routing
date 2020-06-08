@@ -9,12 +9,12 @@ import './Blog.css';
 
 class Blog extends Component {
     state = {
-        post: [],
+        posts: [],
         selectedPostId:null,
         error: false
     }
     componentDidMount () {
-        axios.get(axios.baseURL + '/posts')
+        axios.get( '/posts')
             .then(resposne => {
                 const posts = resposne.data.slice(0, 4);
                 const updatedPosts = posts.map(post => {
@@ -23,10 +23,11 @@ class Blog extends Component {
                         author: 'Anshumant' 
                     }
                 })
-                this.setState({post: updatedPosts});
+                this.setState({posts: updatedPosts});
                 // console.log(resposne);
             })
             .catch(error => {
+                //console.log(error);
                 this.setState({error:true})
             });
     }
@@ -38,8 +39,9 @@ class Blog extends Component {
     render () {
         let posts = <p style={{textAlign : 'center' }}>Something went wrong!</p>
         if(!this.state.error){
-            posts = this.state.post.map(post => {
-                return <Post key={post.id} 
+            posts = this.state.posts.map(post => {
+                return <Post 
+                    key={post.id} 
                     title={post.title} 
                     author={post.author}
                     clicked={ () => this.postSelectedHandeler(post.id)}/>
