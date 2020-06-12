@@ -5,10 +5,17 @@ import './Blog.css';
 
 //components
 import Posts from './Posts/Posts';
-import NewPost from './NewPost/NewPost';
+// import NewPost from './NewPost/NewPost';
+import asyncComponent from '../../hoc/asyncComponent';
+
+const AsyncNewPost = asyncComponent(() => {
+    return import('./NewPost/NewPost');
+});
 
 class Blog extends Component {
-    
+    state = {
+        auth: true
+    }
 
     render () {
         return (
@@ -34,8 +41,10 @@ class Blog extends Component {
                 </header>
                 {/* <Route path="/" exact render={() => <h1>Home</h1>}/> */}
                 <Switch>
-                    <Route path="/new-post"  component={NewPost}/>
+                    {this.state.auth ? <Route path="/new-post"  component={AsyncNewPost}/> : null}
                     <Route path="/posts/"  component={Posts}/>
+                    <Route render={() => <h1>Not Found  </h1>}/>
+                    {/* <Redirect from="/" to="/posts"/> */}
                 </Switch>
             </div>
         );
